@@ -1,0 +1,5 @@
+/* Cibler les cellules du tableau qui contiennent des employés */
+.employee-cell {
+    height: 5px;
+    /* Vous pouvez également définir d'autres styles pour les cellules ici */
+}
