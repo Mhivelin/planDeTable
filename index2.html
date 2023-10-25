@@ -143,7 +143,7 @@
 
         // Cette fonction envoie une requête POST pour ajouter un employé au serveur
         function ajouterEmploye(newEmployee) {
-            fetch('http://192.168.75.154:3000/addEmployee', {
+            fetch('http://54.38.32.241/.154:3000/addEmployee', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -196,7 +196,7 @@
             console.log("supprimerEmploye");
 
             // La route '/supprimerEmploye' pour supprimer un employé
-            fetch('http://192.168.75.154:3000/supprimerEmploye', {
+            fetch('http://54.38.32.241:3000/supprimerEmploye', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -224,7 +224,7 @@
         document.getElementById("ajout").addEventListener("click", onAjoutClick);
 
         // Chargez la liste des employés existante depuis le serveur
-        fetch('http://192.168.75.154:3000/getEmployees')
+        fetch('http://54.38.32.241:3000/getEmployees')
             .then(response => response.json())
             .then(data => {
                 console.log('Employés chargés avec succès : ', data);
@@ -233,7 +233,7 @@
                 employes = data;
 
                 // recupere les bureaux
-                fetch('http://192.168.75.154:3000/getBureaux')
+                fetch('http://54.38.32.241:3000/getBureaux')
                     .then(response => response.json())
                     .then(data => {
                         console.log('Bureaux chargés avec succès : ', data);
