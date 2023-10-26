@@ -28,26 +28,33 @@
             </tr>
         </table>
         <div id="table-container"></div>
-        <div class="ajout">
-            <h2>Ajouter un employé</h2>
-            <form method="post" action="/addEmployee" enctype="multipart/form-data">
+        <div class="card">
+            <div class="card-body">
 
-                <div class="mb-3">
-                    <label for="prenom" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="prenom" name="prenom" aria-describedby="prenom">
+                <h2>Ajouter un employé</h2>
 
-                </div>
-                <div class="mb-3">
-                    <div class="input-group mb-3">
+                <form method="post" action="/addEmployee" enctype="multipart/form-data">
 
-                        <input type="file" class="form-control" id="image" name="image">
+                    <div class="mb-3">
+                        <label for="prenom" class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" aria-describedby="prenom">
 
                     </div>
-                </div>
-                <button type="button" class="btn btn-primary" id="ajout">Ajouter</button>
-            </form>
+                    <div class="mb-3">
+                        <div class="input-group mb-3">
+
+                            <input type="file" class="form-control" id="image" name="image">
+
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="ajout">Ajouter</button>
+                </form>
+
+            </div>
 
         </div>
+        </br>
+
         <div class="liste">
             <table class="table table-bordered">
                 <thead>
