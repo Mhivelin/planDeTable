@@ -30,15 +30,18 @@
         <div id="table-container"></div>
         <div class="ajout">
             <h2>Ajouter un employé</h2>
-            <form>
+            <form method="post" action="/addEmployee" enctype="multipart/form-data">
+
                 <div class="mb-3">
                     <label for="prenom" class="form-label">Prénom</label>
-                    <input type="text" class="form-control" id="prenom" aria-describedby="prenom">
+                    <input type="text" class="form-control" id="prenom" name="prenom" aria-describedby="prenom">
+
                 </div>
                 <div class="mb-3">
                     <div class="input-group mb-3">
 
-                        <input type="file" class="form-control" id="image" accept="image/*">
+                        <input type="file" class="form-control" id="image" name="image">
+
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary" id="ajout">Ajouter</button>
@@ -66,28 +69,9 @@
 
         // ######################################################### recupere les images #########################################################
 
-        const imageInput = document.getElementById('image');
 
-        // Écoutez l'événement "drop" sur le formulaire
-        document.querySelector('form').addEventListener('drop', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
 
-            // Vérifiez s'il y a des fichiers déposés
-            if (e.dataTransfer.files.length > 0) {
-                const file = e.dataTransfer.files[0];
-                // Assurez-vous que le fichier est une image
-                if (file.type.startsWith('image/')) {
-                    imageInput.files = e.dataTransfer.files;
-                }
-            }
-        });
 
-        // Empêchez le comportement par défaut de glisser-déposer
-        document.querySelector('form').addEventListener('dragover', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
 
 
 
@@ -170,39 +154,52 @@
 
         // ######################################################### ajout et suppression des employés #########################################################
 
-        // Cette fonction envoie une requête POST pour ajouter un employé au serveur
-        function ajouterEmploye(newEmployee) {
-            fetch('http://192.168.75.154:3000/addEmployee', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newEmployee),
+
+
+
+
+
+        // Cette fonction ajoute un employé au serveur
+
+        const imageInput = document.getElementById('image');
+
+        function ajouterEmploye() {
+            const prenom = document.getElementById("prenom").value;
+            const imageInput = document.getElementById("image");
+            const imageFile = imageInput.files[0];
+
+            if (!prenom || !imageFile) {
+                alert("Veuillez remplir tous les champs");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("prenom", prenom);
+            formData.append("image", imageFile);
+
+            fetch("http://54.38.32.241:3000/addEmployee", {
+                method: "POST",
+                body: formData,
             })
                 .then(response => response.json())
-                .then(result => {
-                    console.log('Employé ajouté avec succès !');
-                    // Vous pouvez mettre à jour la liste des employés et les tables ici si nécessaire
+                .then(data => {
+                    if (data.success) {
+                        alert("Employé ajouté avec succès !");
+                        // Réinitialisez les champs du formulaire si nécessaire
+                        document.getElementById("prenomInput").value = "";
+                        imageInput.value = "";
+                    } else {
+                        alert("Une erreur s'est produite lors de l'ajout de l'employé.");
+                    }
                 })
                 .catch(error => {
-                    console.error('Erreur lors de l\'ajout de l\'employé :', error);
+                    console.error("Erreur lors de la requête : ", error);
                 });
         }
 
+
         // Cette fonction est appelée lorsque vous cliquez sur "Ajouter"
-        function onAjoutClick() {
-            const prenom = document.getElementById("prenom").value;
-            const image = document.getElementById("image").value;
-
-
-
-            ajouterEmploye({ prenom, image });
-
-            // actualiser la page
-            location.reload();
-        }
-
-
+        document.getElementById("ajout").addEventListener("click", ajouterEmploye);
 
 
         // Cette fonction est appelée lorsque vous cliquez sur "Supprimer"
@@ -212,7 +209,7 @@
             console.log("supprimerEmploye");
 
             // La route '/supprimerEmploye' pour supprimer un employé
-            fetch('http://192.168.75.154:3000/supprimerEmploye', {
+            fetch('http://54.38.32.241:3000/supprimerEmploye', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -235,11 +232,6 @@
 
 
 
-
-        // Écoutez le clic sur le bouton "Ajouter" et appelez onAjoutClick
-        document.getElementById("ajout").addEventListener("click", onAjoutClick);
-
-
         // ######################################################### melange des employés #########################################################
 
         function shuffle(array) {
@@ -260,7 +252,7 @@
 
 
         // Chargez la liste des employés existante depuis le serveur
-        fetch('http://192.168.75.154:3000/getEmployees')
+        fetch('http://54.38.32.241:3000/getEmployees')
             .then(response => response.json())
             .then(data => {
                 console.log('Employés chargés avec succès : ', data);
@@ -269,7 +261,7 @@
                 employes = data;
 
                 // recupere les bureaux
-                fetch('http://192.168.75.154:3000/getBureaux')
+                fetch('http://54.38.32.241:3000/getBureaux')
                     .then(response => response.json())
                     .then(data => {
                         console.log('Bureaux chargés avec succès : ', data);
