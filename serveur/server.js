@@ -8,18 +8,21 @@ const multer = require('multer');
 app.use(cors());
 app.use(bodyParser.json());
 
-// Configuration de Multer pour le stockage des images
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'images'); // Répertoire où vous souhaitez stocker les images
+        cb(null, 'images/'); // Répertoire de destination
     },
     filename: function (req, file, cb) {
-        const prenom = req.body.prenom;
-        const fileName = prenom + '.png';
-        cb(null, fileName);
+        const employeeName = req.body.prenom; // Utilisez le nom de l'employé depuis le corps de la requête
+        const imageExtension = file.originalname.split('.').pop(); // Obtenez l'extension du fichier d'origine
+        const imageFileName = `${employeeName}.${imageExtension}`; // Générez le nom du fichier
+        cb(null, imageFileName);
     },
 });
-const upload = multer({ storage });
+
+
+const upload = multer({ storage: storage });
+
 
 app.get('/', (req, res) => {
     // Serve the HTML file for your front-end here
@@ -27,10 +30,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/addEmployee', upload.single('image'), (req, res) => {
-    const employee = req.body;
-    console.log(employee);
+    const prenom = req.body.prenom; // Récupérez le prénom de l'employé depuis le corps de la requête
+    const nomImage = req.file.filename; // Récupérez le nom du fichier image depuis req.file.filename
 
-    const nomImage = req.file.filename;
+    console.log(req);
+
+    console.log('Prénom de l\'employé : ' + prenom);
     console.log('Nom du fichier image : ' + nomImage);
 
     fs.readFile(__dirname + '/employes.json', (err, data) => {
@@ -40,7 +45,16 @@ app.post('/addEmployee', upload.single('image'), (req, res) => {
             return;
         }
         const employes = JSON.parse(data);
-        employes.push(employee);
+
+        // Créez un nouvel employé avec le prénom et le nom du fichier image
+        const CheminNouvelleImage = "serveur/images/" + nomImage;
+        const newEmployee = {
+            prenom: prenom,
+            image: CheminNouvelleImage
+        };
+
+        employes.push(newEmployee); // Ajoutez le nouvel employé
+
         fs.writeFile(__dirname + '/employes.json', JSON.stringify(employes), (err) => {
             if (err) {
                 console.log(err);
@@ -49,9 +63,9 @@ app.post('/addEmployee', upload.single('image'), (req, res) => {
             }
             res.json({ success: true });
         });
-    }
-    );
+    });
 });
+
 
 
 
