@@ -1,12 +1,5 @@
 
 
-// ######################################################### recupere les images #########################################################
-
-
-
-
-
-
 
 // ######################################################### affichage des employés #########################################################
 
@@ -110,7 +103,7 @@ function ajouterEmploye() {
     formData.append("prenom", prenom);
     formData.append("image", imageFile);
 
-    fetch("http://54.38.32.241:3000/addEmployee", {
+    fetch("http://192.168.75.154:3000/addEmployee", {
         method: "POST",
         body: formData,
     })
@@ -145,7 +138,7 @@ function supprimerEmploye(index) {
     console.log("supprimerEmploye");
 
     // La route '/supprimerEmploye' pour supprimer un employé
-    fetch('http://54.38.32.241:3000/supprimerEmploye', {
+    fetch('http://192.168.75.154:3000/supprimerEmploye', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -188,7 +181,7 @@ function shuffle(array) {
 
 
 // Chargez la liste des employés existante depuis le serveur
-fetch('http://54.38.32.241:3000/getEmployees')
+fetch('http://192.168.75.154:3000/getEmployees')
     .then(response => response.json())
     .then(data => {
         console.log('Employés chargés avec succès : ', data);
@@ -197,7 +190,7 @@ fetch('http://54.38.32.241:3000/getEmployees')
         employes = data;
 
         // recupere les bureaux
-        fetch('http://54.38.32.241:3000/getBureaux')
+        fetch('http://192.168.75.154:3000/getBureaux')
             .then(response => response.json())
             .then(data => {
                 console.log('Bureaux chargés avec succès : ', data);
