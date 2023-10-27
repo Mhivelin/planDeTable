@@ -31,3 +31,51 @@ Ce README fournit des informations sur le projet "Plan de Table DELTIC", qui com
 4. Démarrez le serveur : node server.js.
 5. Ouvrez l'application web en accédant à http://54.38.32.241/planDeTable/ dans votre navigateur.
 
+
+## schéma reseau (mermaid)
+
+```mermaid
+graph TD
+
+  subgraph Internet
+    A[Client Web]
+    B[Client Web]
+  end
+
+  C[internet]
+
+  subgraph "Serveur de l'Application"
+    E((Serveur Web))
+    D((Base de Données))
+  end
+
+    A --> C 
+    B --> C
+    C --> D
+    
+    D --> E
+    
+
+
+
+  style D fill:#F44336,stroke:red;
+  style E fill:#FF9800,stroke:orange;
+
+
+```
+
+
+## schéma UML (mermaid)
+
+### cas d'utilisation
+
+```mermaid
+sequenceDiagram
+
+actor utilisateur
+subgraph
+    serveur
+    utilisateur ->> serveur : demande de la liste des employés
+    serveur ->> utilisateur : liste des employés
+    end
+end
