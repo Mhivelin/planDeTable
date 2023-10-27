@@ -1,18 +1,14 @@
+/* Cibler les cellules du tableau qui contiennent des employés */
+.employee-cell {
+    color: black;
+
+    /* Vous pouvez également définir d'autres styles pour les cellules ici */
+}
+
 .dropzone {
     border: 2px dashed #ccc;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
-
-}
-
-/* cellule class="employee-cell" 
-height = hauteur
-width = largeur
-*/
-
-.employee-cell {
-    min-height: 100px;
-    min-width: 100px;
 
 }
