@@ -70,12 +70,38 @@ graph TD
 ### cas d'utilisation
 
 ```mermaid
-sequenceDiagram
+graph TD
 
-actor utilisateur
-subgraph
-    serveur
-    utilisateur ->> serveur : demande de la liste des employés
-    serveur ->> utilisateur : liste des employés
-    end
+
+subgraph Serveur
+  A[Recevoir les requêtes HTTP]
+  B[Traiter les demandes d'ajout d'employés]
+  C[Traiter les demandes de suppression d'employés]
+  D[Fournir la liste des employés existants]
+  E[Fournir la configuration des bureaux]
 end
+
+subgraph "Application Web"
+  F[Afficher le plan de table]
+  G[Ajouter un employé]
+  H[Supprimer un employé]
+  I[Réorganiser les employés]
+end
+
+A --> B
+A --> C
+A --> D
+A --> E
+F --> G
+F --> H
+F --> I
+
+subgraph "Bases de Données"
+  J[employes.json]
+  K[bureaux.json]
+end
+
+B --> J
+E --> K
+
+

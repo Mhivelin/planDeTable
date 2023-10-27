@@ -29,42 +29,45 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+
+
+
 app.post('/addEmployee', upload.single('image'), (req, res) => {
-    const prenom = req.body.prenom; // Récupérez le prénom de l'employé depuis le corps de la requête
-    const nomImage = req.file.filename; // Récupérez le nom du fichier image depuis req.file.filename
+    const prenom = req.body.prenom;
+    const imageFileName = req.file.filename; // Le nom du fichier image après avoir été stocké par multer
 
-    console.log(req);
 
-    console.log('Prénom de l\'employé : ' + prenom);
-    console.log('Nom du fichier image : ' + nomImage);
+    console.log(req.body);
+
+    if (!prenom || !imageFileName) {
+        return res.json({ success: false, message: "Veuillez fournir un prénom et une image" });
+    }
 
     fs.readFile(__dirname + '/employes.json', (err, data) => {
         if (err) {
             console.log(err);
-            res.json({ success: false });
-            return;
+            return res.json({ success: false, message: "Erreur lors de la lecture du fichier employes.json" });
         }
-        const employes = JSON.parse(data);
 
-        // Créez un nouvel employé avec le prénom et le nom du fichier image
-        const CheminNouvelleImage = "serveur/images/" + nomImage;
-        const newEmployee = {
-            prenom: prenom,
-            image: CheminNouvelleImage
+        const employes = JSON.parse(data);
+        const nouvelEmploye = {
+            prenom,
+            image: imageFileName
         };
 
-        employes.push(newEmployee); // Ajoutez le nouvel employé
+        employes.push(nouvelEmploye);
 
-        fs.writeFile(__dirname + '/employes.json', JSON.stringify(employes), (err) => {
+        fs.writeFile(__dirname + '/employes.json', JSON.stringify(employes, null, 2), (err) => {
             if (err) {
                 console.log(err);
-                res.json({ success: false });
-                return;
+                return res.json({ success: false, message: "Erreur lors de l'écriture du fichier employes.json" });
             }
-            res.json({ success: true });
+
+            return res.json({ success: true, message: "Employé ajouté avec succès" });
         });
     });
 });
+
 
 
 
@@ -117,3 +120,81 @@ app.post('/supprimerEmploye', (req, res) => {
 app.listen(3000, () => {
     console.log('Serveur écoutant sur le port 3000');
 });
+
+
+
+// /shuffleEmployees
+
+app.post('/shuffleEmployees', () => {
+    // recuperer les employes dans le json
+    fs.readFile(__dirname + '/employes.json', (err, data) => {
+        if (err) {
+            console.log(err);
+            res.json({ success: false });
+            return;
+        }
+        const employes = JSON.parse(data);
+
+        // recuperer les bureaux dans le json
+        fs.readFile(__dirname + '/bureaux.json', (err, data) => {
+            if (err) {
+                console.log(err);
+                res.json({ success: false });
+                return;
+            }
+            const bureaux = JSON.parse(data);
+
+            //compter le nombre de place dans les bureaux
+            let nbPlaces = 0;
+            for (let i = 0; i < bureaux.length; i++) {
+                nbPlaces += bureaux[i].places;
+            }
+            // ajouter les employes vides pour completer les places
+            for (let i = 0; i < nbPlaces - employes.length; i++) {
+                employes.push({ prenom: "", image: "" });
+            }
+
+            /*     {
+        "id": 1,
+        "prenom": "Adele",
+        "image": "serveur/images/Adele.png",
+        "placeActuelle": 1
+    }, */
+            // melanger les index de place des employes
+            let indexPlace = [];
+            for (let i = 0; i < nbPlaces; i++) {
+                indexPlace.push(i);
+            }
+
+            for (let i = 0; i < indexPlace.length; i++) {
+                let randomIndex = Math.floor(Math.random() * indexPlace.length);
+                let temp = indexPlace[i];
+                indexPlace[i] = indexPlace[randomIndex];
+                indexPlace[randomIndex] = temp;
+            }
+
+            // affecter les places aux employes
+            for (let i = 0; i < employes.length; i++) {
+                employes[i].placeActuelle = indexPlace[i];
+            }
+
+
+
+
+            // ecrire les employes dans le json
+            fs.writeFile(__dirname + '/employes.json', JSON.stringify(employes), (err) => {
+                if (err) {
+                    console.log(err);
+                    res.json({ success: false });
+                    return;
+                }
+                res.json({ success: true });
+            });
+        }
+        );
+    }
+    );
+}
+);
+
+

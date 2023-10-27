@@ -94,6 +94,8 @@ function ajouterEmploye() {
     const imageInput = document.getElementById("image");
     const imageFile = imageInput.files[0];
 
+
+
     if (!prenom || !imageFile) {
         alert("Veuillez remplir tous les champs");
         return;
@@ -123,7 +125,7 @@ function ajouterEmploye() {
         });
 
     // actualiser la page
-    location.reload();
+    //location.reload();
 }
 
 
@@ -163,16 +165,25 @@ function supprimerEmploye(index) {
 
 // ######################################################### melange des employés #########################################################
 
-function shuffle(array) {
-    let currentIndex = array.length,
-        randomIndex;
+function shuffle() {
+    // appel de l'api pour melanger les employés
+    fetch('http://192.168.75.154:3000/shuffleEmployees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employes: employes }),
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Employés mélangés avec succès !');
+            // Vous pouvez mettre à jour la liste des employés et les tables ici si nécessaire
+        })
+        .catch(error => {
+            console.error('Erreur lors du mélange des employés :', error);
+        });
 
-    while (currentIndex != 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-    }
-    return array;
+
 }
 
 
