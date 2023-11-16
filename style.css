@@ -1,14 +1,39 @@
-/* Cibler les cellules du tableau qui contiennent des employés */
-.employee-cell {
-    color: black;
+/* pour toutes les images */
+img {
+    max-width: 100%;
+    height: auto;
+    /* enlever le fond blanc autour des images */
+    mix-blend-mode: multiply;
 
-    /* Vous pouvez également définir d'autres styles pour les cellules ici */
 }
+
 
 .dropzone {
     border: 2px dashed #ccc;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
+
+}
+
+
+
+
+/* classe="place" */
+.place {
+    background-color: burlywood;
+}
+
+
+
+/* Style pour les cases du tableau */
+#tableau td {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+
 
 }
