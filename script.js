@@ -156,7 +156,7 @@ function ajouterEmploye() {
     formData.append("prenom", prenom);
     formData.append("image", imageFile);
 
-    fetch("http://192.168.75.154:3000/addEmployee", {
+    fetch("http://54.38.32.241:3000/addEmployee", {
         method: "POST",
         body: formData,
     })
@@ -191,7 +191,7 @@ function supprimerEmploye(index) {
     //console.log("supprimerEmploye");
 
     // La route '/supprimerEmploye' pour supprimer un employé
-    fetch('http://192.168.75.154:3000/supprimerEmploye', {
+    fetch('http://54.38.32.241:3000/supprimerEmploye', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ function supprimerEmploye(index) {
 
 function shuffle() {
     // appel de l'api pour melanger les employés
-    fetch('http://192.168.75.154:3000/shuffleEmployees', {
+    fetch('http://54.38.32.241:3000/shuffleEmployees', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -254,7 +254,7 @@ let bureaux = [];
 
 function fetchBureaux() {
     try {
-        fetch('http://192.168.75.154:3000/getBureaux')
+        fetch('http://54.38.32.241:3000/getBureaux')
             .then(response => response.json())
             .then(data => {
                 bureaux = data;
@@ -278,7 +278,7 @@ let employes = [];
 
 function fetchEmployees() {
     try {
-        fetch('http://192.168.75.154:3000/getEmployees')
+        fetch('http://54.38.32.241:3000/getEmployees')
             .then(response => response.json())
             .then(data => {
                 employes = data;
@@ -309,7 +309,7 @@ function toggleBureau(x, y) {
 
 
     // La route '/addBureau' pour ajouter un bureau
-    fetch('http://192.168.75.154:3000/toggleBureau', {
+    fetch('http://54.38.32.241:3000/toggleBureau', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
